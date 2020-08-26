@@ -1,33 +1,39 @@
 <template>
   <div class="home">
     <!-- <ff-icon-svg v-for="i in $IconSvg" :key="i" class="icon" :name="i"></ff-icon-svg> -->
-    <div class="home-l">
+    <div class="home-l" ref="homeL">
       <div class="s-button">Save to My stars</div>
       <span class="title">Katy Perry</span>
-      <ul class="list_wrap">
-        <li v-for="list in playLists" :key="list.id">
-          <img :src="list.coverImgUrl" alt @click="handleClickImg(list.id)" />
+      <ul class="list_wrap" ref="listWrap">
+        <li v-for="list in playLists" :key="list.id" >
+          <img 
+            :data-key="list.id"
+            :class="{active: activeId === list.id}" 
+            :src="list.coverImgUrl" alt 
+            @click="e => handleClickImg(e,list)" />
           <span class="name">{{list.copywriter}}</span>
           <span class="time">2017</span>
         </li>
       </ul>
     </div>
-    <div class="home-r" v-if="playListPreview">
-      <ul>
-        <li
-          v-for="(music, index) in playListPreview"
-          :key="music.id"
-          @click="handleClickMusic(index)"
-          :class="{'active': musicId === music.id}"
-        >
-          <span>
-            <ff-icon-svg class="icon_play" v-if="musicId === music.id" name="qp_icon_portal"></ff-icon-svg>
-            <span class="music__name">{{music.name}}</span>
-          </span>
-          <!-- <span>{{music.ar.name}}</span> -->
-        </li>
-      </ul>
-    </div>
+      <div class="home-r" v-show="activeId">
+        <ul>
+          <transition-group enter-active-class="animate__animated animate__fadeIn">
+            <li
+              v-for="(music, index) in playListPreview"
+              :key="music.id"
+              @click="handleClickMusic(index)"
+              :class="{'active': musicId === music.id}"
+            >
+              <span>
+                <ff-icon-svg class="icon_play" v-if="musicId === music.id" name="qp_icon_portal"></ff-icon-svg>
+                <span class="music__name">{{music.name}}</span>
+              </span>
+              <!-- <span>{{music.ar.name}}</span> -->
+            </li>
+          </transition-group>
+        </ul>
+      </div>
   </div>
 </template>
 
@@ -36,12 +42,14 @@
 import { getHighQuality, getListDetails } from "@/api/song";
 import { mapState, mapMutations } from "vuex";
 import { formatSongList } from "@/libs/util.song.js";
+import scrollIntoView from '@/libs/utils/scrollTo.js'
 export default {
   name: "home",
   data() {
     return {
       playLists: [],
-      playListPreview: null
+      playListPreview: [],
+      activeId: ''
     };
   },
   created() {
@@ -63,8 +71,11 @@ export default {
       }
       this.playListPreview = formatSongList(value.playlist.tracks);
     },
-    handleClickImg(id) {
-      this._getListDetails(id);
+    handleClickImg(e, list) {
+      this.activeId = list.id
+      this.activeDom = e.target
+      this._getListDetails(list.id);
+      // e.target.scrollIntoView()()
     },
     handleClickMusic(index) {
       this.setPlayListDetails(this.playListPreview);
@@ -79,6 +90,13 @@ export default {
           this.playListDetails[this.currentIndex].id) ||
         ""
       );
+    }
+  },
+  watch: {
+    activeId () {
+      this.$nextTick(() => {
+        scrollIntoView(this.$refs.homeL, this.activeDom)
+      })
     }
   }
 };
@@ -155,11 +173,13 @@ export default {
       margin-left: 20px;
       display: flex;
       flex-direction: column;
-
       img {
         width: 100%;
         height: auto;
         @extend %unable-select;
+        &.active{
+        border: 1px solid #f00;
+      }
       }
       span {
         height: 19px;

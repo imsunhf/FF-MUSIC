@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/plugin/ff-music'
+import 'animate.css/animate.min.css'
 Vue.config.productionTip = false
 
 
