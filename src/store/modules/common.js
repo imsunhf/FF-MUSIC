@@ -3,7 +3,8 @@ export default {
   state: {
     playStatus: false, // 播放状态
     playListDetails: [], // 播放列表
-    currentIndex: -1 // 当前歌曲索引
+    currentIndex: -1, // 当前歌曲索引
+    isShowPanel: false
   },
   mutations: {
     setPlayStatus(state, playStatus) {
@@ -14,6 +15,9 @@ export default {
     },
     setCurrentIndex(state, currentIndex) {
       state.currentIndex = currentIndex
+    },
+    setIsShowPanel(state, isShowPanel){
+      state.isShowPanel = isShowPanel
     }
   },
   actions: {}

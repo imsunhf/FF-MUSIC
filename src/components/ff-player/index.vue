@@ -12,7 +12,10 @@
       <!-- <ff-icon-svg class="ff-icon" name="baggage"></ff-icon-svg> -->
       <div class="ff-player__view">
         <div class="music__mes">
-          <img :src="require('@/assets/logo.jpeg')" alt />
+          <img 
+            :src="require('@/assets/logo.jpeg')"
+            @click="togglePanel"
+            alt />
           <span>{{currentSong && currentSong.name || '欢迎体验ff-player'}}</span>
         </div>
         <div class="music__control">
@@ -73,10 +76,14 @@ export default {
   methods: {
     ...mapMutations({
       setPlayStatus: "common/setPlayStatus",
-      setCurrentIndex: "common/setCurrentIndex"
+      setCurrentIndex: "common/setCurrentIndex",
+      setIsShowPanel: "common/setIsShowPanel"
     }),
     togglePlay() {
       this.ffPlayer.togglePlay();
+    },
+    togglePanel(){
+      this.setIsShowPanel(!this.isShowPanel)
     },
     prev() {
       this.ffPlayer.prev();
@@ -125,7 +132,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("common", ["playListDetails", "playStatus", "currentIndex"]),
+    ...mapState("common", ["playListDetails", "playStatus", "currentIndex", "isShowPanel"]),
     playIcon() {
       return this.playStatus ? "qp_icon_pause" : "qp_icon_play";
     },

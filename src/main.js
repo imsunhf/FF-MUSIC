@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import '@/plugin/ff-music'
 import 'animate.css/animate.min.css'
+import 'flex.css';
 Vue.config.productionTip = false
 
 
