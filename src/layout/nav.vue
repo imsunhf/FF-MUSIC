@@ -12,6 +12,9 @@
         <ff-icon-svg name="qp_icon_xf" ></ff-icon-svg>
       </a>
       <ff-icon-svg class="call_me" name="qp_icon_qq" @click.native="handlerClickQQ"></ff-icon-svg>
+      <a href="https://github.com/imsunhf/FF-MUSIC" target="_blank">
+        <ff-icon-svg class="call_me" name="github" ></ff-icon-svg>
+      </a>
     </el-popover>
     <!-- <div class="connection" v-show="!isLab">
     </div> -->
