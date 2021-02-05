@@ -1,37 +1,82 @@
+import Layout from '../layout/index'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Layout from '../layout/index'
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
-    redirect: { name: 'index' },
+    redirect: { name: 'playList' },
     component: Layout,
     children: [
       {
-        path: '/index',
-        name: 'index',
+        path: '/playList',
+        name: 'playList',
         component: () =>
-          import(/* webpackChunkName: "home" */ '../views/Home.vue')
+          import(/* webpackChunkName: "home" */ '../views/PlayList.vue'),
       },
       {
-        path: '/about',
-        name: 'about',
+        path: '/playList/:id',
+        name: 'playListDetails',
+        component: () => import('../views/PlayListDetails.vue'),
+      },
+      {
+        path: '/singer',
+        name: 'singer',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "about" */ '../views/About.vue')
-      }
-    ]
+          import(/* webpackChunkName: "singer" */ '../views/Singer.vue'),
+      },
+      {
+        path: '/singer/:id',
+        name: 'singerDetails',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "SingerDetails" */ '../views/SingerDetails.vue'
+          ),
+      },
+      {
+        path: '/lab/noteJump',
+        name: 'noteJump',
+        meta: {
+          auth: true,
+          isLab: true,
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "noteJump" */ '../views/lab/noteJump.vue'
+          ),
+      },
+      {
+        path: '/lab/echartsJump',
+        name: 'echartsJump',
+        meta: {
+          auth: true,
+          isLab: true,
+        },
+        component: () =>
+          import(/* webpackChunkName: "noteJump" */ '../views/lab/echartsJump.vue'),
+      },
+    ],
   },
 ]
 
+
 const router = new VueRouter({
+  base: window.__POWERED_BY_QIANKUN__ ? '/music' : '/music',
   mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
+})
+
+router.beforeEach((to, from, next) => {
+  next()
 })
 
 export default router

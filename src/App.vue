@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <router-view />
+    <keep-alive>
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 <script>
-export default {};
+export default {}
 </script>
 <style lang="scss">
-@import "~@/assets/style/public-class.scss";
+@import '~@/assets/style/public-class.scss';
 </style>

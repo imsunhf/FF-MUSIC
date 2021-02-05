@@ -3,9 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"
+        />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>frontend</title>
+    <title>ff MUSIC</title>
+    <% if ( NODE_ENV === 'production' ) { %>
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d28f535d09cc1d4716abc19b0ef90955";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+    <script data-ad-client="ca-pub-4372158203485647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <%}%>
   </head>
   <body>
     <noscript>

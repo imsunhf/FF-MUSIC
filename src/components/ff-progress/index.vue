@@ -1,13 +1,20 @@
 <template>
   <div class="ff-progress_wrap">
-    <div class="ff-progress ff-progress__outer"  ref="outer">
+    <div 
+      class="ff-progress ff-progress__outer"  
+      ref="outer"
+      @click.self="handleProgressClick"
+      >
     </div>
-    <div class="ff-progress ff-progress__inner" ref="inner">
+    <div class="ff-progress ff-progress__inner" ref="inner" @click.self="handleProgressClick">
+      <ff-img-loading v-show="playStatus" class="player_img"/>
       <div 
         @drag="handleMouseUp"
-        @mousedown.stop="handleMouseDown"
+        @mousedown.stop.self="handleMouseDown"
         class="ff-progress__dotted" 
-        ref="dotted"></div>
+        ref="dotted">
+          
+        </div>
     </div>
   </div>
 </template>
@@ -57,19 +64,20 @@ export default {
       const finallyX = e.clientX - this.dotted.clientX
       const width = Math.min(Math.max(this.dotted.left + finallyX, 0), this.outerWidth)
       this.inner.style.width = `${width}px`
-      this.calculatePercent()
+      this.calculatePercent(this.inner.clientWidth)
     },
     handleMouseUp (e) {
       this.$emit('dotted-click', false)
       this.dotted.isDown = false
 
     },
-    calculatePercent () {
-      const percent = this.inner.clientWidth / this.outerWidth
+    calculatePercent (width) {
+      const percent = width / this.outerWidth
       this.$emit('change', percent)
     },
-    handleOuterClick (e) {
-      console.log(e)
+    handleProgressClick (e) {
+      // console.log(e.offsetX)
+      this.calculatePercent(e.offsetX)
     }
   },
   computed: {
@@ -104,7 +112,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
   .ff-progress {
-    height: 1px;
+    height: 2px;
     width: 100%;
     background: #e6e6e6;
   }
@@ -115,19 +123,28 @@ export default {
   }
   .ff-progress__inner {
     width: 0;
-    background: #f00;
+    background: transparent;
     position: absolute;
     left: 0;
+    cursor: pointer;
   }
   .ff-progress__dotted {
     width: 15px;
     height: 15px;
     position: absolute;
     top: -7px;
-    right: 0;
-    background: #f00;
+    right: -4px;
+    background: #fff;
     border-radius: 50%;
+    border: 2px solid #fff;
     cursor: pointer;
+  }
+  .player_img{
+    position: absolute;
+    top: -19px;
+    right: -17px;
+    margin: 0;
+    background: #000;
   }
 }
 </style>

@@ -1,17 +1,18 @@
 import axios from 'axios'
-
+import { Message, MessageBox } from 'element-ui'
 const service = axios.create({
   withCredentials: true,
-  baseURL: 'http://localhost:3000',
-  timeout: 5000
+  baseURL: '/api',
+  timeout: 10000,
 })
 
-const errorLog = error => {
-  console.log(error)
+const errorLog = (error) => {
+  // console.log(error)
 }
 
 service.interceptors.response.use(
-  response => {
+  (response) => {
+    // console.log(response, 'response')
     const dataAxios = response.data
     return dataAxios
 
@@ -23,9 +24,12 @@ service.interceptors.response.use(
     //     break
     // }
   },
-  error => {
+  (error) => {
     if (error && error.response) {
       switch (error.response.status) {
+        case 301:
+          // console.log('301')
+          break
         case 400:
           error.message = '请求错误'
           break
@@ -62,6 +66,21 @@ service.interceptors.response.use(
         default:
           break
       }
+    } else{
+      if (error.message.indexOf('timeout') > -1) {
+        MessageBox({
+          title: '提示',
+          message: '接口已超时，即将重新加载',
+          confirmButtonText: '确定',
+          closeOnClickModal: false,
+          showClose: false,
+        }).then(() => window.location.reload())
+        return
+      }
+      Message({
+        type: 'error',
+        message: error.message
+      })
     }
     errorLog(error)
     return Promise.reject(error)
